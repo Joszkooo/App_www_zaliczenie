@@ -9,7 +9,7 @@ namespace App_www_zaliczenie.Services.GameService
     {
         Task<ServiceResponse<Game>> GetGameById(int GameId);
         Task<ServiceResponse<List<Game>>> GetAllGames();
-        Task<ServiceResponse<Game>> NewGame(PostNewGameDTO newGame);
+        Task<ServiceResponse<GameDTO>> NewGame(PostNewGameDTO newGame);
         Task<ServiceResponse<Game>> DeleteGame(int GameId);
     }
 }

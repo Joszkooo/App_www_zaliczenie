@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App_www_zaliczenie.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RankingController : ControllerBase
     {
         private readonly IRankingService _rankingService;
@@ -18,6 +20,7 @@ namespace App_www_zaliczenie.Controllers
         }
 
         [HttpGet("GetGlobalRanking")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetGlobalRanking()
         {
             return Ok(await _rankingService.GetGlobalRanking());
@@ -30,6 +33,7 @@ namespace App_www_zaliczenie.Controllers
         }
 
         [HttpGet("GetCategoryRanking{category}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategoryRanking(Category category)
         {
             return Ok(await _rankingService.GetCategoryRanking(category));

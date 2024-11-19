@@ -16,37 +16,94 @@ namespace App_www_zaliczenie.Services.RankingService
         {
             _context = context;
         }
-        
-        [Authorize]
+
         public async Task<ServiceResponse<PostVoteDTO>> PostUpVote(int GameId, int UserId)
         {
             var serviceResponse = new ServiceResponse<PostVoteDTO>();
             try
             {
-                var GameRanking = await _context.GlobalRankings
+                var globalRanking = await _context.GlobalRankings
                     .Include(g => g.Game)
                         .FirstOrDefaultAsync(x => x.GameId == GameId);
+
                 var UserDB = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
 
-                if (GameRanking is not null && UserDB is not null)
+                var userRanking = await _context.UserRankings.FirstOrDefaultAsync(u => u.AccountId == UserId && u.GameId == GameId);
+
+                if (globalRanking is not null && UserDB is not null)
                 {
+                    if (userRanking is not null && userRanking.DownVote)
+                    {
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = $"Istnieje negatywna opinia o grze ID {GameId}. Usun negatywna opinie aby zaglosowan negatywnie!";
+                        return serviceResponse;
+                    }
+
                     if (!UserDB.VotedGames.Contains(GameId)) 
                     {
+                        if (userRanking is not null)
+                        {
+                            userRanking.UpVote = true;
+                        }
+                        else
+                        {
+                            var newUserRanking = new UserRanking
+                            {
+                                UpVote = true,
+                                DownVote = false,
+                                GameId = GameId,
+                                AccountId = UserId
+                            };
+                            await _context.UserRankings.AddAsync(newUserRanking);
+                        }
+                        
+                        globalRanking.UpVotes += 1;
+
                         UserDB.VotedGames.Add(GameId);
-                        GameRanking.UpVotes += 1;
+
+                        _context.Entry(UserDB).Property(u => u.VotedGames).IsModified = true;
+            
+                        await _context.SaveChangesAsync();
+
+                        serviceResponse.Data = new PostVoteDTO
+                        {
+                            Name = globalRanking.Game.Name,
+                            UpVotes = globalRanking.UpVotes,
+                            DownVotes = globalRanking.DownVotes
+                        };
+                        serviceResponse.Message = $"Zaglosowano POZYTYWNIE na gre o ID {GameId}";
+                    }
+                    else {
+                        globalRanking.UpVotes -= 1;
+                        UserDB.VotedGames.Remove(GameId);
+                        
+                        if (userRanking is not null)
+                        {
+                            userRanking.UpVote = false;
+                        }
+                        else
+                        {
+                            var newUserRanking = new UserRanking
+                            {
+                                UpVote = false,
+                                DownVote = false,
+                                GameId = GameId,
+                                AccountId = UserId
+                            };
+                            await _context.UserRankings.AddAsync(newUserRanking);
+                        }
+                        
+                        _context.Entry(UserDB).Property(u => u.VotedGames).IsModified = true;
                         await _context.SaveChangesAsync();
                         serviceResponse.Data = new PostVoteDTO
                         {
-                            Name = GameRanking.Game.Name,
-                            UpVotes = GameRanking.UpVotes,
-                            DownVotes = GameRanking.DownVotes
+                            Name = globalRanking.Game.Name,
+                            UpVotes = globalRanking.UpVotes,
+                            DownVotes = globalRanking.DownVotes
                         };
+                        
+                        serviceResponse.Message = $"Usunieto POZYTYWNY glos na gre o ID {GameId}";
                     }
-                    else {
-                        serviceResponse.Message = $"Użytkownik o id {UserId} zagłosował już na gre o id {GameId}";
-                        serviceResponse.Success = false;
-                    }
-
                 }
                 else{
                     serviceResponse.Message = $"Brak gry o id {GameId} i/lub gracza {UserId}";
@@ -61,36 +118,91 @@ namespace App_www_zaliczenie.Services.RankingService
             }
         }
 
-        [Authorize]
         public async Task<ServiceResponse<PostVoteDTO>> PostDownVote(int GameId, int UserId)
         {
             var serviceResponse = new ServiceResponse<PostVoteDTO>();
             try
             {
-                var GameRanking = await _context.GlobalRankings
+                var globalRanking = await _context.GlobalRankings
                     .Include(g => g.Game)
                         .FirstOrDefaultAsync(x => x.GameId == GameId);
                 var UserDB = await _context.Users.FirstOrDefaultAsync(u => u.Id == UserId);
+                var userRanking = await _context.UserRankings.FirstOrDefaultAsync(u => u.AccountId == UserId && u.GameId == GameId);
 
-                if (GameRanking is not null && UserDB is not null)
+                if (globalRanking is not null && UserDB is not null)
                 {
-                    if (UserDB.VotedGames.Contains(GameId)) 
+                    if (userRanking is not null && userRanking.UpVote)
                     {
-                        UserDB.VotedGames.Remove(GameId);
-                        GameRanking.UpVotes -= 1;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = $"Istnieje pozytywna opinia o grze ID {GameId}. Usun pozytywna opinie aby zaglosowan negatywnie!";
+                        return serviceResponse;
+                    }
+                    if (!UserDB.VotedGames.Contains(GameId)) 
+                    {
+                        if (userRanking is not null)
+                        {
+                            userRanking.DownVote = true;
+                        }
+                        else
+                        {
+                            var newUserRanking = new UserRanking
+                            {
+                                UpVote = false,
+                                DownVote = true,
+                                GameId = GameId,
+                                AccountId = UserId
+                            };
+                            await _context.UserRankings.AddAsync(newUserRanking);
+                        }
+
+                        UserDB.VotedGames.Add(GameId);
+
+                        globalRanking.DownVotes += 1;
+
+                        _context.Entry(UserDB).Property(u => u.VotedGames).IsModified = true;
+
                         await _context.SaveChangesAsync();
+                        
                         serviceResponse.Data = new PostVoteDTO
                         {
-                            Name = GameRanking.Game.Name,
-                            UpVotes = GameRanking.UpVotes,
-                            DownVotes = GameRanking.DownVotes
+                            Name = globalRanking.Game.Name,
+                            UpVotes = globalRanking.UpVotes,
+                            DownVotes = globalRanking.DownVotes
                         };
+                        serviceResponse.Message = $"Zaglosowano NEGATYWNIE na gre o ID {GameId}";
                     }
                     else {
-                        serviceResponse.Message = $"Użytkownik o id {UserId} zagłosował już na gre o id {GameId}";
-                        serviceResponse.Success = false;
-                    }
+                        globalRanking.DownVotes -= 1;
+                        UserDB.VotedGames.Remove(GameId);
+                        
 
+                        if (userRanking is not null)
+                        {
+                            userRanking.DownVote = false;
+                        }
+                        else
+                        {
+                            var newUserRanking = new UserRanking
+                            {
+                                UpVote = false,
+                                DownVote = false,
+                                GameId = GameId,
+                                AccountId = UserId
+                            };
+                            await _context.UserRankings.AddAsync(newUserRanking);
+                        }
+                        _context.Entry(UserDB).Property(u => u.VotedGames).IsModified = true;
+                        await _context.SaveChangesAsync();
+
+                        serviceResponse.Data = new PostVoteDTO
+                        {
+                            Name = globalRanking.Game.Name,
+                            UpVotes = globalRanking.UpVotes,
+                            DownVotes = globalRanking.DownVotes
+                        };
+                        
+                        serviceResponse.Message = $"Usunieto NEGATYWNY glos na gre o ID {GameId}";
+                    }
                 }
                 else{
                     serviceResponse.Success = false;

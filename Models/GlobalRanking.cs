@@ -18,6 +18,7 @@ namespace App_www_zaliczenie.Models
         public int GameId { get; set; }
 
         // Required reference navigation to principal (db relation)
+        [JsonIgnore]
         public Game Game { get; set;} = null!;
     }
 }

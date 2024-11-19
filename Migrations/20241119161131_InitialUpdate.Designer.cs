@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App_www_zaliczenie.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241111211612_VotedGamesToList")]
-    partial class VotedGamesToList
+    [Migration("20241119161131_InitialUpdate")]
+    partial class InitialUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,8 +139,7 @@ namespace App_www_zaliczenie.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GameId")
-                        .IsUnique();
+                    b.HasIndex("GameId");
 
                     b.ToTable("GlobalRankings");
                 });
@@ -167,11 +166,9 @@ namespace App_www_zaliczenie.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
+                    b.HasIndex("AccountId");
 
-                    b.HasIndex("GameId")
-                        .IsUnique();
+                    b.HasIndex("GameId");
 
                     b.ToTable("UserRankings");
                 });
@@ -312,8 +309,8 @@ namespace App_www_zaliczenie.Migrations
             modelBuilder.Entity("App_www_zaliczenie.Models.GlobalRanking", b =>
                 {
                     b.HasOne("App_www_zaliczenie.Models.Game", "Game")
-                        .WithOne("GlobalRanking")
-                        .HasForeignKey("App_www_zaliczenie.Models.GlobalRanking", "GameId")
+                        .WithMany("GlobalRanking")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -323,14 +320,14 @@ namespace App_www_zaliczenie.Migrations
             modelBuilder.Entity("App_www_zaliczenie.Models.UserRanking", b =>
                 {
                     b.HasOne("App_www_zaliczenie.Models.Account", "Account")
-                        .WithOne("UserRanking")
-                        .HasForeignKey("App_www_zaliczenie.Models.UserRanking", "AccountId")
+                        .WithMany("UserRanking")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("App_www_zaliczenie.Models.Game", "Game")
-                        .WithOne("UserRanking")
-                        .HasForeignKey("App_www_zaliczenie.Models.UserRanking", "GameId")
+                        .WithMany("UserRanking")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

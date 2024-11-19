@@ -11,6 +11,6 @@ namespace App_www_zaliczenie.Models
     public class Account : IdentityUser<int>
     {
         public List<int> VotedGames {get; set;} = new List<int>();
-        public UserRanking? UserRanking { get; set; } 
+        public ICollection<UserRanking>? UserRanking { get; set; } = new List<UserRanking>();
     }
 }

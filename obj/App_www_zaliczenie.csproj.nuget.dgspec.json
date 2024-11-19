@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joszko\\Documents\\GitHub\\App_www_zaliczenie\\App_www_zaliczenie.csproj": {}
+    "D:\\CODE\\App_www_zaliczenie\\App_www_zaliczenie.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joszko\\Documents\\GitHub\\App_www_zaliczenie\\App_www_zaliczenie.csproj": {
+    "D:\\CODE\\App_www_zaliczenie\\App_www_zaliczenie.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joszko\\Documents\\GitHub\\App_www_zaliczenie\\App_www_zaliczenie.csproj",
+        "projectUniqueName": "D:\\CODE\\App_www_zaliczenie\\App_www_zaliczenie.csproj",
         "projectName": "App_www_zaliczenie",
-        "projectPath": "C:\\Users\\joszko\\Documents\\GitHub\\App_www_zaliczenie\\App_www_zaliczenie.csproj",
+        "projectPath": "D:\\CODE\\App_www_zaliczenie\\App_www_zaliczenie.csproj",
         "packagesPath": "C:\\Users\\joszko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joszko\\Documents\\GitHub\\App_www_zaliczenie\\obj\\",
+        "outputPath": "D:\\CODE\\App_www_zaliczenie\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\joszko\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -95,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

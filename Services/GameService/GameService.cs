@@ -95,9 +95,9 @@ namespace App_www_zaliczenie.Services.GameService
             }
         }
 
-        public async Task<ServiceResponse<Game>> NewGame(PostNewGameDTO newGameDTO)
+        public async Task<ServiceResponse<GameDTO>> NewGame(PostNewGameDTO newGameDTO)
         {
-            var serviceResponse = new ServiceResponse<Game>();
+            var serviceResponse = new ServiceResponse<GameDTO>();
             try
             {
                 var newGame = new Game {
@@ -106,14 +106,26 @@ namespace App_www_zaliczenie.Services.GameService
                     Category = newGameDTO.Category
                 };
 
-                _context.Games.Attach(newGame);
+                if (await _context.Games.FirstOrDefaultAsync(g => g.Name == newGame.Name) is not null)
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = $"Gra o tytule {newGame.Name} juz istnieje";
+                    return serviceResponse;
+                }
+
                 await _context.Games.AddAsync(newGame);
                 await _context.SaveChangesAsync();
 
-                addRanking(newGame);
+                await addRanking(newGame);
 
-                serviceResponse.Data = newGame;
-                serviceResponse.Message = $"Gra oraz ranking dodany pomyślnie.";
+                serviceResponse.Data = new GameDTO
+                {
+                    Id = newGame.Id,
+                    Name = newGame.Name,
+                    Description = newGame.Description,
+                    Category = newGame.Category
+                };
+                serviceResponse.Message = $"Gra oraz ranking dodane pomyslnie.";
                 return serviceResponse;
             }
             catch (Exception ex)
@@ -124,15 +136,15 @@ namespace App_www_zaliczenie.Services.GameService
             }
         }
 
-        private async void addRanking(Game game)
+        private async Task addRanking(Game game)
         {
-            GlobalRanking newGlobalRanking = new GlobalRanking
+            var newGlobalRanking = new GlobalRanking
             {
                 UpVotes = 0,
                 DownVotes = 0,
                 GameId = game.Id
             };
-            _context.GlobalRankings.Attach(newGlobalRanking);
+            
             await _context.GlobalRankings.AddAsync(newGlobalRanking);
             await _context.SaveChangesAsync();
         }

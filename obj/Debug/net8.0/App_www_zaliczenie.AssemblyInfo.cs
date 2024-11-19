@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("App_www_zaliczenie")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c99471e7f35fdfc6a4354c6d7e8803f7cfe6302")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80ea385cd7fb4a34dd2d8e3f3a9cd5905e236216")]
 [assembly: System.Reflection.AssemblyProductAttribute("App_www_zaliczenie")]
 [assembly: System.Reflection.AssemblyTitleAttribute("App_www_zaliczenie")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

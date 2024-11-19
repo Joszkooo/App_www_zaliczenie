@@ -265,20 +265,17 @@ namespace App_www_zaliczenie.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GlobalRankings_GameId",
                 table: "GlobalRankings",
-                column: "GameId",
-                unique: true);
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRankings_AccountId",
                 table: "UserRankings",
-                column: "AccountId",
-                unique: true);
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRankings_GameId",
                 table: "UserRankings",
-                column: "GameId",
-                unique: true);
+                column: "GameId");
         }
 
         /// <inheritdoc />

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "o5Sc2jBkL+c=",
+  "dgSpecHash": "Qpyu8pTN10NHYGH6qDaslquWZb7OGzmV0ojySjDmzPssotgbgfYjxh0uTDrKRWphUX4ZYb8K3vuCiZUFgTfuCw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joszko\\Documents\\GitHub\\App_www_zaliczenie\\App_www_zaliczenie.csproj",
+  "projectFilePath": "D:\\CODE\\App_www_zaliczenie\\App_www_zaliczenie.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joszko\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\joszko\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

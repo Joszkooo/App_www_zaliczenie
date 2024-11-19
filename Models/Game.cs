@@ -19,8 +19,11 @@ namespace App_www_zaliczenie.Models
         [Required]
         public Category Category { get; set; }
 
-        // Reference navigation (for db foregin key)
-        public GlobalRanking? GlobalRanking { get; set; } 
-        public UserRanking? UserRanking { get; set; }
+        // Reference navigation (for db foreign key)
+        [JsonIgnore]
+        public ICollection<GlobalRanking>? GlobalRanking { get; set; } = new List<GlobalRanking>();
+        
+        [JsonIgnore]
+        public ICollection<UserRanking>? UserRanking { get; set; } = new List<UserRanking>();
     }
 }
