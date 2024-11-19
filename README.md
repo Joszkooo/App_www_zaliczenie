@@ -14,6 +14,7 @@ Wyróżniamy modele:
 - gry
 - rankingu globalnego
 - rankingu użytkownika
-- rankingu wg kategorii (tabela JOIN)   ???????????
+- rankingu wg kategorii
+
 
 
